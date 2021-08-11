@@ -19,14 +19,26 @@ const appendList = (list, value) => {
 };
 const removeFromList = (list, node) => {
     let x = list;
-    let p = null;
-    while (x !== node) {
+    let p = node;
+    while (x !== node && x !== null) {
+        // 如果 node 不在 list 中，x 就可能为 null
         p = x;
         x = x.next;
     }
+    if (x === null) {
+        // 若 x 为 null，则不需要删除，直接 return， false 表示无法删除不在list里的节点
+        return false;
+    } else if (x === p) {
+        // 这说明要删除的节点是第一个节点
+        p = x.next;
+        return p; // 如果删除的是第一个节点，那么就要把新 list 的头节点 p 返回给外面，即 newList = removeFromList(list, list)
+    } else {
+        p.next = x.next;
+        return list; // 如果删除的不是第一个节点，返回原来的 list 即可
+    }
+
     // console.log(p === null || x的上一个节点)
     // console.log(x === node || x === null)
-    p.next = x.next;
     // if (list === node) {
     //     // 如果删除的是第1个节点
     //     // list就指向第2个节点
@@ -56,6 +68,7 @@ const list = createList(10);
 const node2 = appendList(list, 20);
 const node3 = appendList(list, 30);
 const node4 = appendList(list, 40);
-removeFromList(list, node3);
-console.log("list");
-console.log(list);
+const node = list; // node 就是 list 的第一个节点了现在
+const newList = removeFromList(list, node); // 必须用 newList 获取返回值才能拿到删除了第一个节点的新 list
+console.log("newList");
+console.log(newList);
